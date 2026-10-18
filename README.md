@@ -5,28 +5,28 @@ Overview
 Welcome to the computational companion repository for the Signal Processing course at the Department of Electrical and Computer Engineering, University of Patras.This repository is designed specifically for students taking the course who want to bridge the gap between theoretical derivations on the board and practical, numerical implementations in Python. Rather than treating algorithms as black-box library calls, each module builds the estimators and signal processing pipelines from first principles, supported by:  
 Rigorous Mathematical Derivations: Step-by-step $\LaTeX$ formulations connecting linear algebra, statistical estimation, and physical system modeling.   
 Modular, Production-Grade Python Code: Clean separation between core mathematical solvers (src/models/), diagnostic utilities (src/utils/), and plotting engines (src/visualization/).  
-├── docs/                                         # Course handouts, notes, and reference PDFs
-├── notebooks/                                    # Interactive Jupyter Notebooks for each lab
-│   ├── media/                                    # Cached Manim video renders (1080p60)
-│   └── 01-temperature-sensor-calibration.ipynb   # Estimation & Regularization
-├── src/                                          # Core Python package
-│   ├── models/                                   # Mathematical solvers & DSP algorithms
-│   │   ├── __init__.py
-│   │   └── calibration.py                        # WLS and Tikhonov augmented solvers
-│   ├── utils/                                    # Helper routines & numerical diagnostics
-│   │   ├── __init__.py
-│   │   ├── diagnostics.py                        # Matrix conditioning & statistical metrics
-│   │   └── notebook_helpers.py                   # Manim rendering & notebook display tools
-│   └── visualization/                            # Visual engines
-│       ├── __init__.py
-│       ├── animations.py                         # Manim scenes for geometric intuition
-│       └── plots.py                              # Publication-quality Matplotlib figures
-├── .gitignore                                    # Git exclusions for caches and build artifacts
-├── pyproject.toml                                # Package configuration for editable install
-├── requirements.txt                              # Pinned Python dependencies
-└── README.md                                     # Course guide and documentation
-Getting Started (For Students) follow these steps to set up the local environment on your machine and run the interactive notebooks without import errors.1. Clone the Repositorygit clone <repository-url>
-cd signal-processing-course
+├── docs/                                         # Course handouts, notes, and reference PDFs  
+├── notebooks/                                    # Interactive Jupyter Notebooks for each lab  
+│   ├── media/                                    # Cached Manim video renders (1080p60)  
+│   └── 01-temperature-sensor-calibration.ipynb   # Estimation & Regularization  
+├── src/                                          # Core Python package  
+│   ├── models/                                   # Mathematical solvers & DSP algorithms  
+│   │   ├── __init__.py  
+│   │   └── calibration.py                        # WLS and Tikhonov augmented solvers  
+│   ├── utils/                                    # Helper routines & numerical diagnostics  
+│   │   ├── __init__.py  
+│   │   ├── diagnostics.py                        # Matrix conditioning & statistical metrics  
+│   │   └── notebook_helpers.py                   # Manim rendering & notebook display tools  
+│   └── visualization/                            # Visual engines  
+│       ├── __init__.py  
+│       ├── animations.py                         # Manim scenes for geometric intuition  
+│       └── plots.py                              # Publication-quality Matplotlib figures  
+├── .gitignore                                    # Git exclusions for caches and build artifacts  
+├── pyproject.toml                                # Package configuration for editable install  
+├── requirements.txt                              # Pinned Python dependencies  
+└── README.md                                     # Course guide and documentation  
+Getting Started (For Students) follow these steps to set up the local environment on your machine and run the interactive notebooks without import   errors.1. Clone the Repositorygit clone <repository-url>  
+cd signal-processing-course  
 2. Create and Activate a Virtual EnvironmentIt is strongly recommended to use an isolated Python environment (Python $3.10+$):On Windows (PowerShell):python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 On Linux / macOS:python3 -m venv .venv
