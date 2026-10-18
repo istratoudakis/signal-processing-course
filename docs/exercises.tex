@@ -1,0 +1,71 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Linear Algebra and Estimation: Practical Problems}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{01 Nonlinear Temperature Sensor Calibration under Heterogeneous Noise and Narrow Measurement Range}
+
+In an electronics laboratory, a temperature sensor that exhibits nonlinear behavior at high temperatures is being calibrated. For a set of $N$ known reference temperatures $T_1, T_2, \dots, T_N$ (with $N > 3$), the corresponding output voltages $y_1, y_2, \dots, y_N$ are recorded. The physical relationship connecting the reference temperature to the measured voltage is described by the second-order polynomial model:   
+\begin{equation}
+    y_i = \theta_0 + \theta_1 T_i + \theta_2 T_i^2 + n_i, \quad i = 1, \dots, N
+\end{equation}
+where $\theta_0$ is the constant voltage offset when $T_i = 0$, $\theta_1$ is the linear sensitivity coefficient, $\theta_2$ is the quadratic nonlinearity coefficient, and $n_i$ is the random measurement noise.   
+
+\begin{enumerate}
+    \item \textbf{Mathematical Modeling:} Formulate the measurement model in matrix-vector form $y = X\theta + n$, explicitly defining the vectors and the design matrix from the temperature data, and explain the physical meaning of its dimensions and columns.   
+    \item \textbf{Estimation with Sensors of Varying Reliability:} During data collection, different measuring instruments were used, resulting in independent measurement errors $n_i$ with different, known standard deviations $\sigma_i > 0$ for each observation $i$. Estimate the unknown parameter vector $\theta = [\theta_0, \theta_1, \theta_2]^T$ so that more accurate measurements have a stronger influence on the fit than noisier ones. Your computational implementation must appropriately transform (scale) the data so as to avoid constructing $N \times N$ diagonal matrices in memory, returning both the estimated parameter vector and the optimal value of the weighted error criterion.   
+    \item \textbf{Stabilization over a Narrow Temperature Window:} In a second experimental trial, all reference temperatures $T_i$ were chosen very close to one another (e.g., between $25.0^\circ\text{C}$ and $25.2^\circ\text{C}$). Explain qualitatively and quantitatively why the standard parameter estimate becomes highly sensitive to measurement noise in this setup, even though the fitted voltage curve appears visually accurate. Next, modify the optimization criterion by introducing a trade-off parameter $\lambda > 0$ that penalizes the magnitude of the coefficients $\theta_1$ and $\theta_2$, while leaving the constant offset $\theta_0$ completely unpenalized. Compute the stabilized solution by formulating a single augmented linear least-squares system, thereby avoiding the explicit multiplication of the design matrix by its transpose.   
+\end{enumerate}
+
+\vspace{1cm}
+
+\section*{02 Spectral Analysis of an Acoustic Signal, Sampling Information Loss, and Minimum-Energy Solution}
+
+A digital receiver records $N$ discrete samples of a continuous-time acoustic signal composed of the superposition of $p$ harmonic tones with known frequencies $f_1, f_2, \dots, f_p$ (in Hz). Sampling is performed uniformly at a sampling rate $f_s$ at time instances $t_n = n / f_s$ for $n = 0, 1, \dots, N-1$, according to the observation model:   
+\begin{equation}
+    y[n] = \sum_{j=1}^{p} \theta_j \cos\left(2\pi \frac{f_j}{f_s} n\right) + n[n]
+\end{equation}
+where $\theta_j$ are the unknown amplitudes of each tone and $n[n]$ is additive measurement noise.   
+
+\begin{enumerate}
+    \item \textbf{Observation Model Construction:} Construct the linear mapping that relates the unknown amplitude vector $\theta \in \mathbb{R}^p$ to the recorded sample vector $y \in \mathbb{R}^N$ for an arbitrary number of samples $N$, sampling frequency $f_s$, and set of tone frequencies.   
+    \item \textbf{Experimental Design and Numerical Conditioning Diagnostics:} Depending on the choice of sampling frequency $f_s$, the observation window length $N$, and the separation between the frequencies $f_j$, the collected samples may not contain sufficient information to independently identify each amplitude—either because two distinct continuous-time frequencies produce identical discrete-time samples, or because the frequencies are too close to one another. Develop a diagnostic procedure that inspects the model matrix directly (without forming the Gram matrix of its columns) and computes, given a relative tolerance threshold $\tau$:   
+    \begin{itemize}
+        \item the number of independent parameter directions that are numerically visible in the data,   
+        \item the ratio of the maximum to the minimum dilation induced by the matrix on the parameter space,   
+        \item the basis vectors in the parameter space that describe amplitude combinations which are completely "invisible" to the measurements (i.e., producing zero or negligible output signal).   
+    \end{itemize}
+    \item \textbf{Estimation under Information Deficiency:} When the experimental data cannot uniquely determine the individual tone amplitudes, infinitely many parameter vectors $\theta$ achieve the exact same minimum fitting error. Implement from scratch an estimation algorithm that isolates and zeroes out the influence of unobservable parameter directions (below the tolerance threshold) and selects, among all optimal least-squares solutions, the unique vector with the minimum Euclidean norm. Computationally verify that if this solution is perturbed along any "invisible" direction identified in the previous step, the reconstructed signal $\hat{y}$ remains completely unchanged, whereas the Euclidean norm of the parameter vector strictly increases.   
+\end{enumerate}
+
+\vspace{1cm}
+
+\section*{03 Numerical Accuracy in Nearly Collinear Models and Subspace Geometry}
+
+Consider an overdetermined linear measurement system $y = X\theta + n$ with $N > p$, where the columns of the design matrix $X \in \mathbb{R}^{N \times p}$ are linearly independent (so the mathematical solution minimizing the sum of squared residuals is unique), but form very small angles with one another, making them nearly collinear.   
+
+\begin{enumerate}
+    \item \textbf{Comparison of Numerical Solution Strategies:} Compute the unique parameter vector $\hat{\theta}$ that minimizes the Euclidean norm of the residual without modifying the cost function and without explicitly inverting any matrix, by implementing two distinct numerical approaches:   
+    \begin{itemize}
+        \item In the first approach, reduce the problem to a square, symmetric, and positive definite $p \times p$ system in the parameter space and solve it by factoring the symmetric matrix into a product of triangular matrices, followed by forward and backward substitution.   
+        \item In the second approach, avoid forming the square parameter matrix altogether and work directly on $X$ by constructing an orthonormal basis for its column space, reducing the problem to a single upper-triangular system.
+        \item Compare the numerical sensitivity of both approaches as the columns of $X$ approach linear dependence, justifying why the first approach loses numerical precision more rapidly.   
+    \end{itemize}
+    \item \textbf{Projection Operators and Measurement Space Decomposition:} Geometrically, the optimal prediction $\hat{y} = X\hat{\theta}$ is the point in the column space $\mathcal{C}(X)$ closest to the measurement vector $y$. Using the orthonormal basis of the column space obtained in the second approach (and without any matrix inversion), construct the two $N \times N$ linear operators that project any measurement vector $y \in \mathbb{R}^N$ onto the model subspace $\mathcal{C}(X)$ and onto its orthogonal complement $\mathcal{C}(X)^\perp$, respectively.   
+    \item \textbf{Algebraic and Energy Verification:} Use the two projection operators to decompose the measurement vector $y$ into its predicted component $\hat{y}$ and its residual component $\hat{r}$. Programmatically verify (accounting for floating-point tolerance) that:   
+    \begin{itemize}
+        \item both projection matrices remain unchanged when transposed or when applied twice in succession, while their product is the zero matrix,   
+        \item the residual vector $\hat{r}$ is orthogonal to every column of the design matrix $X$,   
+        \item the squared length (energy) of the original measurement vector $y$ equals the sum of the squared lengths of the two decomposed components $\hat{y}$ and $\hat{r}$.
+    \end{itemize}
+\end{enumerate}
+
+\end{document}

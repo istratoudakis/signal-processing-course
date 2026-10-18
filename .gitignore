@@ -1,0 +1,25 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Manim Animations (Κρίσιμο: αποτρέπει τεράστια MP4 στο Git)
+media/
+
+# Build artifacts (για όταν το src/ γίνει πακέτο)
+build/
+dist/
+*.egg-info/
+
+# IDE & OS specific
+.vscode/
+.DS_Store
+Thumbs.db
